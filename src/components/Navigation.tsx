@@ -9,6 +9,49 @@ const SECTIONS = [
   { id: 'contact', label: 'Contact', icon: 'Talk' },
 ];
 
+const renderIcon = (id: string) => {
+  switch (id) {
+    case 'hero':
+      return (
+        <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+      );
+    case 'projects':
+      return (
+        <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      );
+    case 'mobile':
+      return (
+        <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+        </svg>
+      );
+    case 'skills':
+      return (
+        <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+        </svg>
+      );
+    case 'experience':
+      return (
+        <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+        </svg>
+      );
+    case 'contact':
+      return (
+        <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
+
 export default function Navigation({
   active,
   onNavigate,
@@ -99,20 +142,27 @@ export default function Navigation({
         initial={{ y: 80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.8, duration: 0.6 }}
-        className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
-        style={{ background: 'rgba(2,0,16,0.9)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(255,255,255,0.08)' }}
+        className="fixed bottom-0 left-0 right-0 z-50 md:hidden pb-safe"
+        style={{ background: 'rgba(2,0,16,0.92)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(255,255,255,0.08)' }}
       >
-        <div className="grid grid-cols-3 gap-y-3 px-3 py-3">
+        <div className="flex justify-around items-center px-2 py-3.5">
           {SECTIONS.map((section) => (
             <button
               key={section.id}
               onClick={() => onNavigate(section.id)}
-              className={`flex flex-col items-center gap-1 rounded-lg py-1 transition-all ${
-                active === section.id ? 'text-[#00f5ff]' : 'text-white/40'
+              className={`flex flex-col items-center gap-1 rounded-lg py-1.5 px-2 transition-all duration-300 relative ${
+                active === section.id ? 'text-[#00f5ff] scale-110' : 'text-white/45 hover:text-white/70'
               }`}
             >
-              <span className="text-[10px] font-semibold uppercase tracking-[0.2em]">{section.icon}</span>
-              <span className="font-mono-jet text-[10px]">{section.label}</span>
+              {renderIcon(section.id)}
+              <span className="font-space text-[9px] tracking-wide mt-0.5">{section.label}</span>
+              {active === section.id && (
+                <motion.div
+                  layoutId="mobile-nav-dot"
+                  className="absolute -bottom-1 w-1 h-1 rounded-full bg-[#00f5ff]"
+                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                />
+              )}
             </button>
           ))}
         </div>

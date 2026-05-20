@@ -112,86 +112,86 @@ function SkillBar({ skill, color, delay }: { skill: { name: string; level: numbe
   );
 }
 
-// Orbital visualization
 function OrbitalSkills({ category }: { category: typeof SKILL_CATEGORIES[0] }) {
   const [hovered, setHovered] = useState<number | null>(null);
 
-
   return (
-    <div className="relative w-full h-80 flex items-center justify-center">
-      {/* Center */}
-      <div
-        className="absolute w-16 h-16 rounded-full flex items-center justify-center border z-10"
-        style={{
-          background: `radial-gradient(circle, ${category.color}30, transparent)`,
-          borderColor: category.color + '60',
-          boxShadow: `0 0 30px ${category.color}40`,
-        }}
-      >
-        <span className="text-2xl">{category.icon}</span>
-      </div>
-
-      {/* Orbiting skills */}
-      {category.skills.map((skill, i) => {
-        const angle = (i / category.skills.length) * 360;
-        const radius = 110 + (i % 3) * 25;
-        const x = Math.cos((angle * Math.PI) / 180) * radius;
-        const y = Math.sin((angle * Math.PI) / 180) * radius;
-
-        return (
-          <motion.div
-            key={skill.name}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.08, type: 'spring', stiffness: 200 }}
-            className="absolute cursor-pointer"
-            style={{ left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)`, transform: 'translate(-50%, -50%)' }}
-            onMouseEnter={() => setHovered(i)}
-            onMouseLeave={() => setHovered(null)}
-          >
-            <motion.div
-              animate={{ scale: hovered === i ? 1.3 : 1 }}
-              className="relative"
-            >
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center border text-base transition-all duration-300"
-                style={{
-                  background: hovered === i ? category.color + '30' : 'rgba(255,255,255,0.05)',
-                  borderColor: hovered === i ? category.color : 'rgba(255,255,255,0.15)',
-                  boxShadow: hovered === i ? `0 0 15px ${category.color}60` : 'none',
-                }}
-              >
-                {skill.icon}
-              </div>
-
-              {/* Tooltip */}
-              <AnimatePresence>
-                {hovered === i && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8, y: 5 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 glass-strong rounded-lg px-3 py-2 whitespace-nowrap z-20 border"
-                    style={{ borderColor: category.color + '40' }}
-                  >
-                    <div className="font-space text-xs font-semibold text-white">{skill.name}</div>
-                    <div className="font-mono-jet text-xs" style={{ color: category.color }}>{skill.level}%</div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          </motion.div>
-        );
-      })}
-
-      {/* Orbit circles */}
-      {[80, 110, 130, 150].map((r, i) => (
+    <div className="relative w-full h-80 flex items-center justify-center overflow-hidden">
+      <div className="scale-[0.78] sm:scale-90 lg:scale-100 transition-transform duration-300 w-full h-full flex items-center justify-center relative">
+        {/* Center */}
         <div
-          key={i}
-          className="absolute rounded-full border border-white/5"
-          style={{ width: r * 2, height: r * 2, left: `calc(50% - ${r}px)`, top: `calc(50% - ${r}px)` }}
-        />
-      ))}
+          className="absolute w-16 h-16 rounded-full flex items-center justify-center border z-10"
+          style={{
+            background: `radial-gradient(circle, ${category.color}30, transparent)`,
+            borderColor: category.color + '60',
+            boxShadow: `0 0 30px ${category.color}40`,
+          }}
+        >
+          <span className="text-2xl">{category.icon}</span>
+        </div>
+
+        {/* Orbiting skills */}
+        {category.skills.map((skill, i) => {
+          const angle = (i / category.skills.length) * 360;
+          const radius = 110 + (i % 3) * 25;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+
+          return (
+            <motion.div
+              key={skill.name}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.08, type: 'spring', stiffness: 200 }}
+              className="absolute cursor-pointer"
+              style={{ left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)`, transform: 'translate(-50%, -50%)' }}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+            >
+              <motion.div
+                animate={{ scale: hovered === i ? 1.3 : 1 }}
+                className="relative"
+              >
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center border text-base transition-all duration-300"
+                  style={{
+                    background: hovered === i ? category.color + '30' : 'rgba(255,255,255,0.05)',
+                    borderColor: hovered === i ? category.color : 'rgba(255,255,255,0.15)',
+                    boxShadow: hovered === i ? `0 0 15px ${category.color}60` : 'none',
+                  }}
+                >
+                  {skill.icon}
+                </div>
+
+                {/* Tooltip */}
+                <AnimatePresence>
+                  {hovered === i && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8, y: 5 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 glass-strong rounded-lg px-3 py-2 whitespace-nowrap z-20 border"
+                      style={{ borderColor: category.color + '40' }}
+                    >
+                      <div className="font-space text-xs font-semibold text-white">{skill.name}</div>
+                      <div className="font-mono-jet text-xs" style={{ color: category.color }}>{skill.level}%</div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            </motion.div>
+          );
+        })}
+
+        {/* Orbit circles */}
+        {[80, 110, 130, 150].map((r, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full border border-white/5"
+            style={{ width: r * 2, height: r * 2, left: `calc(50% - ${r}px)`, top: `calc(50% - ${r}px)` }}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -201,8 +201,8 @@ export default function SkillsSection({ containerRef }: { containerRef?: Mutable
   const cat = SKILL_CATEGORIES[activeCategory];
 
   return (
-    <div ref={containerRef ?? undefined} className="min-h-full py-20 px-6">
-      <div className="max-w-6xl mx-auto">
+    <div ref={containerRef ?? undefined} className="min-h-full py-20 px-6 flex flex-col justify-center">
+      <div className="max-w-6xl mx-auto w-full">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -231,14 +231,11 @@ export default function SkillsSection({ containerRef }: { containerRef?: Mutable
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
               onClick={() => setActiveCategory(i)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-space font-medium text-sm border transition-all duration-300 ${
-                activeCategory === i
-                  ? 'text-black'
-                  : 'text-white/60 border-white/10 hover:text-white hover:border-white/30'
-              }`}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full font-space font-medium text-sm border transition-all duration-300 text-white/60 border-white/10 hover:text-white hover:border-white/30"
               style={activeCategory === i ? {
                 background: cat.color,
                 borderColor: cat.color,
+                color: '#000000',
                 boxShadow: `0 0 20px ${cat.color}60`,
               } : {}}
             >

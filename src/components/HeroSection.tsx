@@ -77,16 +77,15 @@ export default function HeroSection({ onNavigate }: { onNavigate: (s: string) =>
             className="mb-2"
           >
             <h1
-              className="font-orbitron font-black text-white"
-              style={{ fontSize: 'clamp(3rem, 8vw, 8rem)', lineHeight: 1, letterSpacing: '-0.02em' }}
+              className="font-orbitron font-black text-white tracking-tight"
+              style={{
+                fontSize: 'clamp(3rem, 8.5vw, 8.5rem)',
+                lineHeight: 1.05,
+                letterSpacing: '-0.03em',
+                textShadow: '0 0 50px rgba(0, 245, 255, 0.12)'
+              }}
             >
-              ALEX
-            </h1>
-            <h1
-              className="font-orbitron font-black gradient-cyan-purple"
-              style={{ fontSize: 'clamp(3rem, 8vw, 8rem)', lineHeight: 1, letterSpacing: '-0.02em' }}
-            >
-              CARTER
+              ALEX <span className="gradient-cyan-purple block">CARTER</span>
             </h1>
           </motion.div>
 

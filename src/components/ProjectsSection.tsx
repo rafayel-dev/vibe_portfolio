@@ -220,8 +220,12 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
               <button
                 onClick={onClose}
                 className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-all shrink-0"
+                aria-label="Close modal"
               >
-                X
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
               </button>
             </div>
 
@@ -242,11 +246,11 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 p-4 rounded-2xl border border-white/10 bg-white/5">
+            <div className="grid grid-cols-3 gap-4 mb-6 p-4 rounded-2xl border border-white/10 bg-white/5">
               {Object.entries(project.metrics).map(([k, v]) => (
                 <div key={k} className="text-center">
-                  <div className="font-orbitron font-bold text-2xl" style={{ color: project.color }}>{v}</div>
-                  <div className="font-mono-jet text-xs text-white/40 capitalize mt-1">{k}</div>
+                  <div className="font-orbitron font-bold text-lg sm:text-2xl" style={{ color: project.color }}>{v}</div>
+                  <div className="font-mono-jet text-[10px] sm:text-xs text-white/40 capitalize mt-1">{k}</div>
                 </div>
               ))}
             </div>
@@ -288,8 +292,8 @@ export default function ProjectsSection({ containerRef }: { containerRef?: Mutab
   const projects = tab === 'web' ? WEB_PROJECTS : MOBILE_PROJECTS;
 
   return (
-    <div ref={containerRef ?? undefined} className="min-h-full py-20 px-6">
-      <div className="max-w-6xl mx-auto">
+    <div ref={containerRef ?? undefined} className="min-h-full py-20 px-6 flex flex-col justify-center">
+      <div className="max-w-6xl mx-auto w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

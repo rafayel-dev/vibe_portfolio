@@ -42,12 +42,90 @@ const SOCIAL_LINKS = [
 
 type TerminalLine = { type: 'system' | 'user' | 'response' | 'empty'; text: string };
 
+function MatrixRain({ onComplete }: { onComplete: () => void }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const updateSize = () => {
+      if (canvas && canvas.parentElement) {
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+      }
+    };
+    updateSize();
+    window.addEventListener('resize', updateSize);
+
+    const fontSize = 12;
+    const columns = Math.floor(canvas.width / fontSize) || 20;
+    const yPositions = Array(columns).fill(0).map(() => Math.random() * -150);
+    const chars = "01010101ABCDEFGHIJKLMNOPQRSTUVWXYZｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺ";
+
+    let animId: number;
+    let frames = 0;
+
+    const draw = () => {
+      ctx.fillStyle = 'rgba(2, 0, 16, 0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#00ff88';
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < yPositions.length; i++) {
+        const char = chars[Math.floor(Math.random() * chars.length)];
+        const x = i * fontSize;
+        const y = yPositions[i];
+
+        if (Math.random() > 0.98) {
+          ctx.fillStyle = '#ffffff';
+        } else {
+          ctx.fillStyle = '#00ff88';
+        }
+
+        ctx.fillText(char, x, y);
+
+        if (y > canvas.height && Math.random() > 0.975) {
+          yPositions[i] = 0;
+        } else {
+          yPositions[i] += fontSize;
+        }
+      }
+
+      frames++;
+      if (frames < 200) {
+        animId = requestAnimationFrame(draw);
+      } else {
+        onComplete();
+      }
+    };
+
+    draw();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', updateSize);
+    };
+  }, [onComplete]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full z-20 rounded-b-2xl pointer-events-none bg-[#020010]"
+    />
+  );
+}
+
 export default function ContactSection({ containerRef }: { containerRef?: MutableRefObject<HTMLDivElement | null> }) {
   const [terminalLines, setTerminalLines] = useState<TerminalLine[]>(
     TERMINAL_INTRO.map((t) => ({ type: 'system' as const, text: t }))
   );
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
+  const [matrixActive, setMatrixActive] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -57,11 +135,25 @@ export default function ContactSection({ containerRef }: { containerRef?: Mutabl
     }
   }, [terminalLines]);
 
+  const handleMatrixComplete = () => {
+    setMatrixActive(false);
+    addLine({ type: 'system', text: '> OVERRIDE COMPLETE. SYSTEM RECOVERY IN PROCESS...' });
+    setTimeout(() => {
+      addLine({ type: 'response', text: '✓ Wake up, Neo... The Matrix has you. 🕶️' });
+      addLine({ type: 'system', text: '> Secure terminal connection restored.' });
+    }, 600);
+  };
+
   const handleCommand = (cmd: string) => {
     const quick = QUICK_COMMANDS.find((q) => q.cmd === cmd);
     if (quick) {
       addLine({ type: 'user', text: `$ ${cmd}` });
       setTimeout(() => addLine({ type: 'response', text: quick.response }), 400);
+    } else if (cmd.trim() === '--matrix') {
+      addLine({ type: 'user', text: `$ ${cmd}` });
+      setTimeout(() => {
+        setMatrixActive(true);
+      }, 300);
     } else if (cmd.trim()) {
       addLine({ type: 'user', text: `$ ${cmd}` });
       setSending(true);
@@ -83,8 +175,8 @@ export default function ContactSection({ containerRef }: { containerRef?: Mutabl
   };
 
   return (
-    <div ref={containerRef ?? undefined} className="min-h-full py-20 px-6">
-      <div className="max-w-5xl mx-auto">
+    <div ref={containerRef ?? undefined} className="min-h-full py-20 px-6 flex flex-col justify-center">
+      <div className="max-w-5xl mx-auto w-full">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -130,9 +222,11 @@ export default function ContactSection({ containerRef }: { containerRef?: Mutabl
               {/* Terminal body */}
               <div
                 ref={terminalRef}
-                className="p-4 h-72 overflow-y-auto space-y-1 font-mono-jet text-sm"
+                className="p-4 h-72 overflow-y-auto space-y-1 font-mono-jet text-sm relative"
                 onClick={() => inputRef.current?.focus()}
               >
+                {matrixActive && <MatrixRain onComplete={handleMatrixComplete} />}
+
                 {terminalLines.map((line, i) => (
                   <motion.div
                     key={i}

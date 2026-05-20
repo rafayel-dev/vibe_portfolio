@@ -172,8 +172,8 @@ export default function MobileShowcase({ containerRef }: { containerRef?: Mutabl
   const app = APP_SCREENS[activeApp];
 
   return (
-    <div ref={containerRef ?? undefined} className="min-h-full py-20 px-6">
-      <div className="max-w-5xl mx-auto">
+    <div ref={containerRef ?? undefined} className="min-h-full py-20 px-6 flex flex-col justify-center">
+      <div className="max-w-5xl mx-auto w-full">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}

@@ -207,10 +207,11 @@ function AmbientRings() {
   );
 }
 
-export default function ThreeScene() {
+export default function ThreeScene({ isHeroActive = true }: { isHeroActive?: boolean }) {
   return (
     <div className="absolute inset-0">
       <Canvas
+        frameloop={isHeroActive ? 'always' : 'never'}
         camera={{ position: [0, 0.5, 5], fov: 75 }}
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 1.5]}

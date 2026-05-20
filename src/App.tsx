@@ -330,7 +330,7 @@ export default function App() {
         style={{ opacity: active === 'hero' ? 1 : 0.15 }}
       >
         <Suspense fallback={null}>
-          <ThreeScene />
+          <ThreeScene isHeroActive={active === 'hero'} />
         </Suspense>
       </div>
 

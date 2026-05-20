@@ -108,8 +108,8 @@ export default function ExperienceSection({ containerRef }: { containerRef?: Mut
   const [activeExp, setActiveExp] = useState<string | null>(null);
 
   return (
-    <div ref={containerRef ?? undefined} className="min-h-full py-20 px-6">
-      <div className="max-w-5xl mx-auto">
+    <div ref={containerRef ?? undefined} className="min-h-full py-20 px-6 flex flex-col justify-center">
+      <div className="max-w-5xl mx-auto w-full">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -132,7 +132,7 @@ export default function ExperienceSection({ containerRef }: { containerRef?: Mut
         {/* Timeline */}
         <div className="relative">
           {/* Vertical line */}
-          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px -translate-x-1/2">
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px -translate-x-1/2">
             <div className="h-full timeline-line opacity-30" />
             <motion.div
               initial={{ height: 0 }}
@@ -154,10 +154,10 @@ export default function ExperienceSection({ containerRef }: { containerRef?: Mut
               }`}
             >
               {/* Timeline node */}
-              <div className="absolute left-8 md:left-1/2 -translate-x-1/2 z-10 flex flex-col items-center">
+              <div className="absolute left-4 md:left-1/2 -translate-x-1/2 z-10 flex flex-col items-center">
                 <motion.div
                   whileHover={{ scale: 1.3 }}
-                  className="w-12 h-12 rounded-full flex items-center justify-center border-2 text-xl cursor-pointer"
+                  className="w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center border-2 text-xs md:text-xl cursor-pointer"
                   style={{
                     borderColor: exp.color,
                     background: `${exp.color}20`,
@@ -170,9 +170,9 @@ export default function ExperienceSection({ containerRef }: { containerRef?: Mut
               </div>
 
               {/* Content card */}
-              <div className={`ml-20 md:ml-0 md:w-5/12 ${i % 2 === 0 ? 'md:pr-16' : 'md:pl-16 md:ml-auto'}`}>
+              <div className={`ml-10 md:ml-0 md:w-5/12 ${i % 2 === 0 ? 'md:pr-16' : 'md:pl-16 md:ml-auto'}`}>
                 <div
-                  className="glass rounded-2xl p-6 border cursor-pointer transition-all duration-300 hover:scale-[1.02]"
+                  className="glass rounded-2xl p-4.5 md:p-6 border cursor-pointer transition-all duration-300 hover:scale-[1.02]"
                   style={{
                     borderColor: activeExp === exp.id ? exp.color + '60' : 'rgba(255,255,255,0.08)',
                     boxShadow: activeExp === exp.id ? `0 0 30px ${exp.color}20` : 'none',
@@ -180,10 +180,10 @@ export default function ExperienceSection({ containerRef }: { containerRef?: Mut
                   onClick={() => setActiveExp(activeExp === exp.id ? null : exp.id)}
                 >
                   {/* Header */}
-                  <div className="flex items-start justify-between mb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-3 gap-2">
                     <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-mono-jet text-xs px-2 py-0.5 rounded-full" style={{ background: exp.color + '20', color: exp.color }}>
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
+                        <span className="font-mono-jet text-[10px] px-2 py-0.5 rounded-full" style={{ background: exp.color + '20', color: exp.color }}>
                           {exp.type}
                         </span>
                         <span className="font-mono-jet text-xs text-white/40">{exp.duration}</span>
@@ -191,7 +191,7 @@ export default function ExperienceSection({ containerRef }: { containerRef?: Mut
                       <h3 className="font-orbitron font-bold text-white text-base">{exp.role}</h3>
                       <p className="font-space text-sm" style={{ color: exp.color }}>{exp.company}</p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-left sm:text-right">
                       <div className="font-mono-jet text-xs text-white/60">{exp.period}</div>
                       <div className="font-mono-jet text-xs text-white/30 mt-1">{exp.location}</div>
                     </div>
@@ -204,7 +204,7 @@ export default function ExperienceSection({ containerRef }: { containerRef?: Mut
                     {exp.tech.slice(0, 4).map((t) => (
                       <span
                         key={t}
-                        className="font-mono-jet text-xs px-2 py-0.5 rounded-full border"
+                        className="font-mono-jet text-[10px] px-2 py-0.5 rounded-full border"
                         style={{ borderColor: exp.color + '30', color: exp.color + 'cc', background: exp.color + '10' }}
                       >
                         {t}
@@ -236,7 +236,7 @@ export default function ExperienceSection({ containerRef }: { containerRef?: Mut
                                 transition={{ delay: j * 0.08 }}
                                 className="flex items-start gap-2 text-sm text-white/70"
                               >
-                                <span style={{ color: exp.color }} className="mt-1 text-xs">▸</span>
+                                <span style={{ color: exp.color }} className="mt-1 text-xs font-semibold">▸</span>
                                 {a}
                               </motion.li>
                             ))}
@@ -245,7 +245,7 @@ export default function ExperienceSection({ containerRef }: { containerRef?: Mut
                             {exp.tech.map((t) => (
                               <span
                                 key={t}
-                                className="font-mono-jet text-xs px-2 py-0.5 rounded-full border"
+                                className="font-mono-jet text-[10px] px-2 py-0.5 rounded-full border"
                                 style={{ borderColor: exp.color + '30', color: exp.color + 'cc', background: exp.color + '10' }}
                               >
                                 {t}
